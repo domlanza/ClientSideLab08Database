@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style/clickSort.css" rel="stylesheet" type="text/css" />  
+        <style>
+            body {
+                font-family: sans-serif;
+                background-color: #F8F8F8;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id='placeListHere' class="clickSort"></div>
+        <script src='js/MakeTable.js'></script>
+        <script src='js/ajax.js'></script>
+        <script>
+            ajax("webAPIs/listUsersAPI.jsp", processUsers, document.getElementById("placeListHere"));
+
+            function processUsers(obj) {
+                
+                var list = obj.webUserList;
+                // print out JS object/array that was converted from JSON data by ajax function
+                console.log(list);
+
+                // build new list as we want the fields to appear in the HTML table
+                // we can decide the order we want the fields to appear (first property defined is shown first)
+                // we can combine, decide to exclude etc...
+                var userList = [];
+
+                // modify properties (image and price) of the array of objects so it will look 
+                // better on the page.
+                for (var i = 0; i < list.length; i++) {
+
+                    userList[i] = {};
+                    // Don't show the id (no meaningful data)
+                    userList[i].image = "<img  src='" + list[i].image + "' style='width:5rem; margin:0.5rem'>";
+                    userList[i].userEmail = list[i].userEmail; // show this first
+                    // Don't show the password
+                    userList[i].birthday = list[i].birthday;
+                    userList[i].membershipFee = list[i].membershipFee;
+                    userList[i].role = list[i].userRoleId + " " + list[i].userRoleType;
+                }
+
+                console.log("USER LIST");
+                console.log(userList);
+
+                // Making a DOM object, nothing shows yet... 
+                document.getElementById("placeListHere").appendChild(MakeTable(userList));
+
+            }
+        </script>
+    </body>
+</html>
